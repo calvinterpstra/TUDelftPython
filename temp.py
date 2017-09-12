@@ -20,4 +20,3 @@ x = t + 2*np.sin(2*t)
 y = t + 2*np.cos(5*t)
 
 pl.plot(x,y,color = 'k') 
-
