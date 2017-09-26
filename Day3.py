@@ -67,7 +67,7 @@ a2 = np.zeros((2,21))
 print(a2);
 """
 
-
+"""
 l = 5
 phi = np.linspace(0, pi, 21);
 
@@ -86,9 +86,36 @@ for j in range(len(xs[:,0])):
 print("xs: ", xs)
 print("ys: ", ys)
 plt.show()
+"""
 
+a1 = 12;
+a2 = 14;
+l1 = 3;
+l2 = l1;
+h1 = a1/2;
+h2 = a2/2;
+alpha = np.linspace(20, 340, 6);
+beta = np.linspace(60, 240, 6);
 
+alphar = alpha * (2*pi / 360);
+betar = beta * (2*pi / 360);
 
+xs1 = np.zeros((6,2));
+ys1 = np.zeros((6,2));
+xs2 = np.zeros((6,2));
+ys2 = np.zeros((6,2));
+
+for i in range(6):
+    xs1[i] = np.array([h2, (h2 + l1*np.cos(alphar[i]))]);
+    ys1[i] = np.array([h1, (h1 + l1*np.sin(alphar[i]))]);
+    xs2[i] = np.array([xs1[i,1], xs1[i,1] + l2*np.cos(betar[i])]);
+    ys2[i] = np.array([ys1[i,1], ys1[i,1] + l2*np.sin(betar[i])]);
+
+for i in range(6):
+    plt.plot(xs1[i], ys1[i],'-o')
+    plt.plot(xs2[i], ys2[i],'-o')
+
+plt.show()
 
 
 
