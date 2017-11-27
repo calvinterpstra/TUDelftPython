@@ -26,6 +26,8 @@ dl = length - l;
 dx = sqrt(abs(pow(dl, 2) - pow(dh, 2))) * -((pow(dl, 2) - pow(dh, 2))/abs(pow(dl, 2) - pow(dh, 2)));
 gap = height + length - wally - apple - platform;
 
+print("h = ", h);
+print("l = ", l);
 print("dx = ", dx);
 print("dh = ", dh);
 print("dl = ", dl);

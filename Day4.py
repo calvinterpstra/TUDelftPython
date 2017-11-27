@@ -10,7 +10,7 @@ import numpy as np;
 import matplotlib.pyplot as plt;
 import numpy.linalg as lg;
 
-"""
+
 a1 = 12;
 a2 = 14;
 l1 = 3;
@@ -23,7 +23,7 @@ beta = np.linspace(60, 240, 6);
 alphar = alpha * (2*pi / 360);
 betar = beta * (2*pi / 360);
 
-xs1 = np.zeros((6,2));
+xs1 = np.zeros((6,2)); 
 ys1 = np.zeros((6,2));
 xs2 = np.zeros((6,2));
 ys2 = np.zeros((6,2));
@@ -34,11 +34,11 @@ xs2[:, 0], xs2[:, 1] = xs1[:,1], xs1[:,1] + l2*np.cos(betar);
 ys2[:, 0], ys2[:, 1] = ys1[:,1], ys1[:,1] + l2*np.sin(betar);
 
 for i in range(6):
-    plt.plot(xs1[i], ys1[i],'-o')
-    plt.plot(xs2[i], ys2[i],'-o')
+    plt.plot(xs1[i], ys1[i],'-o');
+    plt.plot(xs2[i], ys2[i],'-o');
 
-plt.show()
-"""
+plt.show();
+
 
 """
 l = 5
@@ -68,6 +68,8 @@ b = np.array([1, 1, 2]);
 s = lg.solve(a, b);
 print(s);
 """
+
+"""
 p = 1.2;
 v = np.linspace(20, 120, 6);
 v = v*1000/3600;
@@ -75,8 +77,8 @@ fdReal = np.array([11, 45, 109, 182, 298, 419]);
 fdPredicted = (1/2)* p * v**2;
 
 cda = 2 * fdReal / (p * v**2);
-cdaAvg = np.average(cda);
-print("cda: ",cdaAvg);
+cdaR = np.polyfit(fdPredicted, fdReal, 1)[0];
+print("cda: ",cdaR);
 
 r = fdReal - fdPredicted;
 plt.bar(v, r);
@@ -84,7 +86,7 @@ plt.bar(v, r);
 plt.plot(v, fdPredicted);
 plt.plot(v, fdReal);
 plt.show();
-
+"""
 
 
 
