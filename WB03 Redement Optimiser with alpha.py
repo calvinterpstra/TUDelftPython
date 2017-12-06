@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Nov 23 17:39:44 2017
+Created on Wed Dec  6 17:20:18 2017
 
 @author: Calvin
 """
@@ -13,7 +13,7 @@ import numpy.linalg as lg;
 k = 0; # Spring constant
 x = 0; # Spring dispacement
 g = 9.81; # Grav const.
-m = np.linspace(0.35,1.5, 100000); # np.linspace(0.3,1.5, 100000); #0.4; # Mass
+m = np.linspace(0.35,0.35, 100000); # np.linspace(0.3,1.5, 100000); #0.4; # Mass
 h = 1.5; # Height
 s = 5; # Length of slope
 phi = np.arcsin(h/s); # Slope
@@ -29,7 +29,7 @@ Dwheel = np.linspace(0.072,0.072, 100000); #0.150 # np.linspace(0.075,0.170, 100
 Crlager = mu*(Daxel/Dwheel); # Rolling resistance steel bearing
 #x = np.linspace(0.1,0.5, 100000); #np.linspace(0.1,0.5, 100000);
 x = (s+d)*(Daxel/Dwheel);
-alpha = 170;
+alpha = np.linspace(170, 70, x.size);
 alpha = (alpha/360)*2*np.pi;
 
 def Eg(x):
@@ -83,15 +83,15 @@ def main():
     print("rendement:", rendement(x)[0]*100,",",rendement(x)[x.size-1]*100);
     
     
-    
     l = np.sqrt((x**2)/(2*(1-np.cos(alpha))));
     e = 0.5*k*(x**2);
     kTors = (2*e)/(alpha**2);
-    beta = np.linspace(alpha, 0, x.size);
+    alphaVal = 0;
+    beta = np.linspace(alpha[alphaVal], 0, x.size);
     xval = 0;
     dx = np.linspace(0, x[xval], x.size);
-    r = l[xval]*np.cos(beta/2);
-    f = ((alpha-beta)*kTors[xval])/r;
+    r = l[alphaVal]*np.cos(beta/2);
+    f = ((alpha[alphaVal]-beta)*kTors[alphaVal])/r;
     muWheel = f*(Daxel/Dwheel);
     f2 = k[xval]*dx;
     fMax = (alpha*kTors)/l;
@@ -101,19 +101,19 @@ def main():
     muWheel = (fMax*(Daxel/Dwheel)/(m*g*0.6));
     muWheel2 = (fMax2*(Daxel/Dwheel)/(m*g*0.6));
     
-    print("M/2 peak:", MPeak[0]*1000/2, "Nmm");
-    print("M/2 per rad:", kTors[0]*1000/2, "Nmm/rad");
-    print("M/2 per deg: {:5.3f} Nmm/deg". format(((kTors[0]*(2*np.pi))/360)*1000/2))
+    print("M/2 peak:", MPeak[alphaVal]*1000/2, "Nmm");
+    print("M/2 per rad:", kTors[alphaVal]*1000/2, "Nmm/rad");
+    print("M/2 per deg: {:5.3f} Nmm/deg". format(((kTors[alphaVal]*(2*np.pi))/360)*1000/2))
 
     plt.figure(3);
-    plt.plot(m, l*100);
-    plt.title("m vs l (cm)");
+    plt.plot(alpha, l*100);
+    plt.title("alpha vs l (cm)");
     plt.show();
     print("l:", l[0]*100 ,"cm,", l[l.size-1]*100,"cm");
     
     plt.figure(4);
-    plt.plot(m, kTors);
-    plt.title("m vs kTors (N/rad)");
+    plt.plot(alpha, kTors);
+    plt.title("alpha vs kTors (N/rad)");
     plt.show();
     print("kTors:", kTors[0] ,"N/rad,", kTors[kTors.size-1], "N/rad");
     
@@ -126,15 +126,15 @@ def main():
     print("fmax if reg. spring for min m:   ", f2[beta.size-1], "N");
     
     plt.figure(6);
-    plt.plot(m, fMax);
-    plt.title("m vs fMax (axel)");
+    plt.plot(alpha, fMax);
+    plt.title("alpha vs fMax (axel)");
     plt.show();
     print("f peak (axel):               ", fMax[0] ,"N,", fMax[fMax.size-1], "N");
     print("f peak (torsion attatment):  ", fPeakTorsionAttatchment[0] ,"N,", fPeakTorsionAttatchment[fPeakTorsionAttatchment.size-1], "N");
     
     plt.figure(7);
-    plt.plot(m, muWheel);
-    plt.title("m vs mu (wheel)");
+    plt.plot(alpha, muWheel);
+    plt.title("alpha vs mu (wheel)");
     plt.show();
     print("mu (wheel):                  ", muWheel[0] ,",", muWheel[muWheel.size-1]);
     print("mu (wheel) if reg. spring:   ", muWheel2[0] ,",", muWheel2[muWheel2.size-1]);
