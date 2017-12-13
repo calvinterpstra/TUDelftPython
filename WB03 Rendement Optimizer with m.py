@@ -8,30 +8,41 @@ Created on Thu Nov 23 17:39:44 2017
 from math import *;
 import numpy as np;
 import matplotlib.pyplot as plt;
-import numpy.linalg as lg;
+import scipy as sp;
 
+quality = 1000;
 k = 0; # Spring constant
 x = 0; # Spring dispacement
 g = 9.81; # Grav const.
-m = np.linspace(0.35,1.5, 100000); # np.linspace(0.3,1.5, 100000); #0.4; # Mass
+m = np.linspace(0.35,0.45, quality); # np.linspace(0.3,1.5, 100000); #0.4; # Mass
 h = 1.5; # Height
 s = 5; # Length of slope
 phi = np.arcsin(h/s); # Slope
 Cr = 0.002; # Rolling resistance rubber wheel
 d = 2; # Flat distance to finish
 rho = 1.225; # Air density
-v = 3.61663 *0.9; # Average velocity
+#v = 3.61663 *0.9; # Average velocity
 Cw = 0.5; # Air resistance constant
 Af = 0.08*0.05; # Frontal Area
-mu = 0.002; # Friction coefficient in bearing
+mu = 0.02; # Friction coefficient in bearing
 Daxel = 0.004; # Diameter of axel
-Dwheel = np.linspace(0.072,0.072, 100000); #0.150 # np.linspace(0.075,0.170, 10000); # Diameter of wheel
+Dwheel = np.linspace(0.072,0.072, quality); #0.150 # np.linspace(0.075,0.170, 10000); # Diameter of wheel
 Crlager = mu*(Daxel/Dwheel); # Rolling resistance steel bearing
 #x = np.linspace(0.1,0.5, 100000); #np.linspace(0.1,0.5, 100000);
 x = (s+d)*(Daxel/Dwheel);
 alpha = 170;
 alpha = (alpha/360)*2*np.pi;
 
+def avgVelocity():
+    f = lambda x: np.sqrt(2*g*x);
+    a = 0;
+    b = h;
+    avgVel = sp.integrate.quad(f, a, b)[0] / (b-a);
+    return avgVel;
+
+kv = 0.9;
+v = avgVelocity()*kv;
+ 
 def Eg(x):
     return m*g*h; # Grav. potential energy
 def Erol(x):
@@ -63,10 +74,11 @@ def rendement(x):
     return (Eg(x)-ElostFull(x))/Eg(x);
 
 def main():
+    print("v:", v);
     print("x:",x[0]);
-    print("m:",m);
+    print("m:",m[0],",", m[quality-1]);
     k = solveK(x);
-    print("k:",k);
+    print("k:",k[0],",", k[quality-1]);
     plt.figure(1);
     plt.plot(m, k);
     plt.title("m vs k");
@@ -101,9 +113,9 @@ def main():
     muWheel = (fMax*(Daxel/Dwheel)/(m*g*0.6));
     muWheel2 = (fMax2*(Daxel/Dwheel)/(m*g*0.6));
     
-    print("M/2 peak:", MPeak[0]*1000/2, "Nmm");
-    print("M/2 per rad:", kTors[0]*1000/2, "Nmm/rad");
-    print("M/2 per deg: {:5.3f} Nmm/deg". format(((kTors[0]*(2*np.pi))/360)*1000/2))
+    print("M/2 peak:", MPeak[0]*1000/2, "Nmm,", MPeak[x.size-1]*1000/2, "Nmm/rad");
+    print("M/2 per rad:", kTors[0]*1000/2, "Nmm/rad,", kTors[x.size-1]*1000/2, "Nmm/rad");
+    print("M/2 per deg:",(((kTors[0]*(2*np.pi))/360)*1000/2), "Nmm/deg,", (((kTors[x.size-1]*(2*np.pi))/360)*1000/2), "Nmm/deg");
 
     plt.figure(3);
     plt.plot(m, l*100);
