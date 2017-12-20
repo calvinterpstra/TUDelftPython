@@ -5,8 +5,8 @@ RiemannSum.py  - bepaal de midpoint Riemann Sum van een gegeven functie en
                  met de trapezium regel, gebruik makend van Numpy.trapz() 
 
                  OPDRACHT
-                 ========
-                 Zie Opgaven in Oefentoets
+                 --------
+                 Zie OPDRACHTENBLAD Oefentoets
                  
                  TEMPLATE
                  --------
@@ -45,17 +45,15 @@ def getFuncTable(domain, doPrint=False):
         printFuncTable(x,f)
     return x,f
 
-def mid(a,b):
+def mid(fa,fb):
     """
-    functie waarmee midpoint-waarde=ggemiddelde van a en b bepaald worden
+    functie waarmee midpoint-waarde=ggemiddelde van fa en fb bepaald worden
     
     input : a,b, float, functiewaarden in x=xa en x=xb=xa+h, resp.
-    return: g, float, gemiddelde waarde van a en b
+    return: g, float, gemiddelde waarde van fa en fb
     """
-# OPDRACHT 1
-# ==========
-    return (a+b)/2
-# ==========
+    g =(fa+fb)/2
+    return g
     
 def calcRSum(x,f,func):
     """
@@ -71,8 +69,8 @@ def calcRSum(x,f,func):
     sm = 0.0
     for r in range(1,len(x),1):
         fm = f[r]
-        fm = func(f[r],f[r-1])
-        sm += (x[r]-x[r-1])*fm
+        fm = func(f[r],f[r-1])  # hiet worden func min(),max(),mid() aange-
+        sm += (x[r]-x[r-1])*fm  # roepen, bv:  fm = func(f[r],f[r-1])
     return sm
 
 def printFuncTable(x,f):
@@ -140,36 +138,26 @@ def main():
     
     # vier verschilldende Riemann sums, die
     # we met elkaar willen vergelijken ...
-	
-# OPDRACHT 2
-# ==========
-    # 1. met de Numpy trapezium regel == mid point 
+    
+    # 1. met de trapezium regel == identiek aan  mid point 
     npRSum = np.trapz(F,x)
-# ==========
-
     # 2. onze mid point methode (functie mid(a,b))
     RSum   = calcRSum(x,F,mid)
     
     # 3 en 4: onze methode, met resp funcies max en min ...
     mxRSum = calcRSum(x,F,max)
     mnRSum = calcRSum(x,F,min)
-
-# OPDRACHT 3
-# ==========    
-    # druk ze af ...
-    print('Riemann sum: {:12.9e} (NumPy trapz: {:12.9e})'. format(RSum,npRSum))
     
-# ==========
-    # laat zien dat voor elke N: RSum_max >= RSum_mid >= RSum_min
+    # druk ze af ...
+    print('Riemann sum: {:12.9e} (NumPy: {:12.9e})'. format(RSum,npRSum))
+    
+    # laat zien dat voor elke N: RSum_max >= R >= 
     print('Max Riemann : {:s}'. format(str( mxRSum )))
     print('Mid Riemann : {:s}'. format(str(   RSum )))
     print('Min Riemann : {:s}'. format(str( mnRSum )))
-
-# OPDRACHT 4
-# ==========
+    
     # verschil als percentage van RSum_min ...
     print('Max verschil: {:s} %'. format(str( 100*(mxRSum-mnRSum)/mnRSum )) )
-# ==========
 
     # create the figure ...    
     plt.subplots(1,1, figsize=(12,4))

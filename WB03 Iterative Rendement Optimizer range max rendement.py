@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Dec 13 18:32:36 2017
+Created on Fri Dec 15 11:50:19 2017
 
 @author: Calvin
 """
@@ -9,10 +9,10 @@ import numpy as np;
 import matplotlib.pyplot as plt;
 import scipy as sp;
 
-quality = 100; # Elements in range
+quality = 100;
 g = 9.81; # Grav const.
-m = np.linspace(0.38, 0.28, quality); # Mass
-h = np.linspace(1.5, 1.5, quality); # Height
+m = np.linspace(0.30, 0.30, quality); # Mass
+h = np.linspace(1.50, 1.45, quality); # Height
 phi = np.arcsin(1.5/5); # Slope
 s = h/np.sin(phi); # Length of slope
 Cr = 0.0025; # Rolling resistance rubber wheel
@@ -20,17 +20,15 @@ d = 2.1; # Flat distance to finish
 rho = 1.225; # Air density
 Cw = 0.5; # Air resistance constant
 Af = 0.05*0.05; # Frontal Area
-mu = np.linspace(0.04, 0.08, quality); # Friction coefficient in bearing
+mu = np.linspace(0.04, 0.04, quality); # Friction coefficient in bearing
 Daxel = 0.004; # Diameter of axel
 Dwheel = 0.072; # Diameter of wheel
 CrBear = mu*(Daxel/Dwheel); # Rolling resistance steel bearing
-alpha = np.linspace(150, 165, quality); # Delta Angle of the lever
-alpha = (alpha/360)*2*np.pi; # ^ in rad
-rTSpring = 0.015; # Radius of tortion spring
-hysteresisCoef = 0.98; # Hysteresis loss one way
+alpha = np.linspace(170, 170, quality);
+alpha = (alpha/360)*2*np.pi;
+rTSpring = 0.015;
+hysteresisCoef = 0.98;
 x = (s+d)*(Daxel/Dwheel); # Spring dispacement
-kHigh = 2373; # Max T (Nmm)
-kLow = 1356; # Max T (Nmm)
 
 def avgVelocity(k):
     a = 0;
@@ -71,6 +69,8 @@ def Ebear(k):
     return mu*(avgF(k)*x) + avgFpeak(k)*Daxel*0.5*alpha*mu; # Energy loss due to internal forces in bearing (one way)
 def Elost(k):
     return (Erol() + Eair(k) + Ebear(k) + ErolBear()); # Energy lost (one way)
+def solveDh(k):
+    return Elost(k)/(m*g);
 
 def ErolReturn(dh):
     return Cr*m*g*np.cos(phi)*((h-dh)/np.sin(phi)) + Cr*m*g*d; # Energy loss due to rolling resistance (one way)
@@ -80,21 +80,19 @@ def EairReturn(k, dh):
     return 0.5*rho*(avgVelocity(k)**2)*Cw*Af*(((h-dh)/np.sin(phi))+d); # Energy loss due to air resistance (one way)
 def EbearReturn(k, dh): 
     return mu*(avgF(k)*x)*(dh/h) + avgFpeak(k)*Daxel*alpha*mu*(dh/h); # Energy loss due to internal forces in bearing (one way)
-def ElostFull(k, dh):
-    return (Elost(k) + (ErolReturn(dh) + EairReturn(k, dh) + EbearReturn(k, dh) + ErolBearReturn(dh))); # Energy lost (one way)
-
+def ElostFull(k):
+    return (Elost(k) + (ErolReturn(solveDh(k)) + EairReturn(k, solveDh(k)) + EbearReturn(k, solveDh(k)) + ErolBearReturn(solveDh(k)))); # Energy lost (one way)
 def solveK(k):
     return 2*((Eg() - Elost(k))*hysteresisCoef)/(x**2);
-def rendement(k, dh):
-    return ((Eg()-ElostFull(k, dh))*(hysteresisCoef**2))/Eg();
-def solveDh(k, dh):
-    return h - h*rendement(k, dh);
+def rendement(k):
+    return ((Eg()-ElostFull(k))*(hysteresisCoef**2))/Eg();
+
 def solveX(k):
     return np.sqrt(2*((Eg() - Elost(k))*hysteresisCoef)/k) * (Dwheel/Daxel);
 
 def main():
     k = np.linspace(1, 1, quality); # Spring constant
-    dh = h;
+    
     
     errorPower = 5;
     print("Loading <", end=' ');
@@ -102,7 +100,6 @@ def main():
     while(not(np.abs(error1) < (10**-errorPower) and np.abs(error2) < (10**-errorPower))): 
         kOld = k;
         k = solveK(k);
-        dh = solveDh(k, dh);
         error1, error2 = (kOld[0]-k[0])/k[0], (kOld[quality-1]-k[quality-1])/k[quality-1];
         #print("(",error1,error2,")", end=' ');
         print("-", end=' ');
@@ -114,12 +111,12 @@ def main():
     print("m:", m[0],",", m[quality-1]);
     print("k:",k[0],",", k[quality-1]);
     
-    print("lost in rol:     ",((Erol() + ErolReturn(dh))/Eg())[0]*100,",", ((Erol() + ErolReturn(dh))/Eg())[quality-1]*100);
-    print("lost in rol bear:",((ErolBear() + ErolBearReturn(dh))/Eg())[0]*100,",", ((ErolBear() + ErolBearReturn(dh))/Eg())[quality-1]*100);
-    print("lost in air:     ",((Eair(k) + EairReturn(k, dh))/Eg())[0]*100,",", ((Eair(k) + EairReturn(k, dh))/Eg())[quality-1]*100);
-    print("lost in bear:    ",((Ebear(k) + EbearReturn(k, dh))/Eg())[0]*100,",", ((Ebear(k) + EbearReturn(k, dh))/Eg())[quality-1]*100);
-    print("diff in rendement:",((rendement(k, dh)[0]-rendement(k, dh)[quality-1])*-100));
-    print("rendement:", rendement(k, dh)[0]*100,",",rendement(k, dh)[quality-1]*100);
+    print("lost in rol:     ",((Erol() + ErolReturn(solveDh(k)))/Eg())[0]*100,",", ((Erol() + ErolReturn(solveDh(k)))/Eg())[quality-1]*100);
+    print("lost in rol bear:",((ErolBear() + ErolBearReturn(solveDh(k)))/Eg())[0]*100,",", ((ErolBear() + ErolBearReturn(solveDh(k)))/Eg())[quality-1]*100);
+    print("lost in air:     ",((Eair(k) + EairReturn(k, solveDh(k)))/Eg())[0]*100,",", ((Eair(k) + EairReturn(k, solveDh(k)))/Eg())[quality-1]*100);
+    print("lost in bear:    ",((Ebear(k) + EbearReturn(k, solveDh(k)))/Eg())[0]*100,",", ((Ebear(k) + EbearReturn(k, solveDh(k)))/Eg())[quality-1]*100);
+    print("diff in rendement:",((rendement(k)[0]-rendement(k)[quality-1])*-100));
+    print("rendement:", rendement(k)[0]*100,",",rendement(k)[quality-1]*100);
     
     l = np.sqrt((x**2)/(2*(1-np.cos(alpha))));
     e = 0.5*k*(x**2);
@@ -127,7 +124,7 @@ def main():
     fMax = (alpha*kTors)/l;
     MPeak = (alpha*kTors);
     fPeakTorsionAttatchment = ((2*e)/(alpha))/rTSpring;
-    muWheel = (fMax*(Daxel/Dwheel)/(m*g*0.5));
+    muWheel = (fMax*(Daxel/Dwheel)/(m*g*0.6));
     
     m2Nmm = (((kTors*(2*np.pi))/360)*1000/2)*180;
     
@@ -147,7 +144,7 @@ def main():
     plt.title("mu vs kTors (N/rad)");
     plt.show();
     print("kTors:", kTors[0] ,"N/rad,", kTors[quality-1], "N/rad");
-    print("kTors/%rendement:", (kTors[quality-1]-kTors[0])/(rendement(k, dh)[quality-1]-rendement(k, dh)[0]));
+    print("kTors/%rendement:", (kTors[quality-1]-kTors[0])/(rendement(k)[quality-1]-rendement(k)[0]));
     
     plt.figure(6);
     plt.plot(mu, fMax);
@@ -160,23 +157,6 @@ def main():
     plt.plot(mu, muWheel);
     plt.title("mu vs mu (wheel)");
     plt.show();
-    print("mu (wheel):", muWheel[0] ,",", muWheel[quality-1]);
-    
-    kTHigh = ((((kHigh/180)/1000)*2)*360)/(2*np.pi)
-    eHigh = 0.5*kTHigh*(alpha**2);
-    calibkHigh = (2*eHigh)/(x**2);
-    kTLow = ((((kLow/180)/1000)*2)*360)/(2*np.pi)
-    eLow = 0.5*kTLow*(alpha**2);
-    calibkLow = (2*eLow)/(x**2);
-    print();print();
-    print("dX finish line:", ((solveX(calibkHigh)-(s+d-0.1))*100)[0],"cm,", ((solveX(calibkLow)-(s+d-0.1))*100)[quality-1], "cm");
-    
-    print();
-    print("dh:", (dh*100)[0],",", (dh*100)[quality-1], "cm");
-    starth = h;
-    endh = h-dh;
-    print("start:", starth[0],",", starth[quality-1], ", end:", endh[0],",", endh[quality-1]);
-    print("rendement:", rendement(k, dh)[0]*100,",",rendement(k, dh)[quality-1]*100);
-    print("score:", (endh/(starth*m))[0],",", (endh/(starth*m))[quality-1]);
+    print("mu (wheel):                  ", muWheel[0] ,",", muWheel[quality-1]);
     
 main();

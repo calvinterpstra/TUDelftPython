@@ -46,7 +46,7 @@ Cramer.py -- Regel van Cramer gebruiken om Ax=b op te lossen.
     
     OPDRACHT
     --------
-    Zie Opgaven in Oefentoets
+    Zie OPDRACHTEN blad Oefentoets
     
     TEMPLATE
     --------
@@ -84,9 +84,6 @@ def solve(A,b):
     D = det2(A)
     # maak een lege vector die we gaan vullen met x_i elementen ...
     X = []
-
-# OPDRACHT 1
-# ==========
     
     for i in range(N):
         Ai = []                         # lege lijst die N rows gaat bevatten
@@ -97,11 +94,8 @@ def solve(A,b):
                     Ai[r].append(b[r])  # vervang deze door elem b
                 else:
                     Ai[r].append(A[r][c])
-        X.append( det2(Ai)/D )      # pas regel van Cramer toe en voeg
+        X.append( det2(Ai)/D )          # pas regel van Cramer toe en voeg
                                         # zo gevonden x_i toe aan vector X
-
-# ==========
-
     return X
 
 def main():
@@ -124,30 +118,20 @@ def main():
     
     inaccurate = False
     for n in range(len(b)):
-	
-# OPDRACHT 2
-# ==========
-        # Welke vermenigvuldiging hoort hier?
-        B[n] = A[n][0]*X[0] + A[n][1]*X[1]
+        B[n] = A[n][0]*X[0]+A[n][1]*X[1]
         # het verschil met de gegeven b
         D[n] = B[n] - b[n]
-
-        # en welke test ?
-        if not D[n] < DELTA:
+        if not abs(D[n]) < DELTA:
             inaccurate = True
-#===========
             
-# OPDRACHT 3
-# ==========
     # check het resultaat: toch niet inaccuraat??
     if inaccurate:
-        result = 'inaccurate'
+        result = 'NOT OK'
     else:
-        result = 'accurate'
+        result = 'OK'
     
     # druk jouw verschilvector D af ...
     print('Mijn verschilvector D = B-b = AX-b: {:s} ... {:s}'. \
           format(str(D),result))
-# ===========
-
+    
 main()

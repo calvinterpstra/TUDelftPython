@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Dec 13 18:32:36 2017
+Created on Fri Dec 15 21:57:49 2017
 
 @author: Calvin
 """
@@ -11,7 +11,7 @@ import scipy as sp;
 
 quality = 100; # Elements in range
 g = 9.81; # Grav const.
-m = np.linspace(0.38, 0.28, quality); # Mass
+m = np.linspace(0.30, 0.30, quality); # Mass
 h = np.linspace(1.5, 1.5, quality); # Height
 phi = np.arcsin(1.5/5); # Slope
 s = h/np.sin(phi); # Length of slope
@@ -20,17 +20,17 @@ d = 2.1; # Flat distance to finish
 rho = 1.225; # Air density
 Cw = 0.5; # Air resistance constant
 Af = 0.05*0.05; # Frontal Area
-mu = np.linspace(0.04, 0.08, quality); # Friction coefficient in bearing
+mu = np.linspace(0.08, 0.08, quality); # Friction coefficient in bearing
 Daxel = 0.004; # Diameter of axel
 Dwheel = 0.072; # Diameter of wheel
 CrBear = mu*(Daxel/Dwheel); # Rolling resistance steel bearing
-alpha = np.linspace(150, 165, quality); # Delta Angle of the lever
+alpha = np.linspace(150, 150, quality); # Delta Angle of the lever
 alpha = (alpha/360)*2*np.pi; # ^ in rad
 rTSpring = 0.015; # Radius of tortion spring
 hysteresisCoef = 0.98; # Hysteresis loss one way
 x = (s+d)*(Daxel/Dwheel); # Spring dispacement
-kHigh = 2373; # Max T (Nmm)
-kLow = 1356; # Max T (Nmm)
+kHigh = 1808; # Max T (Nmm)
+kLow = 1808; # Max T (Nmm)
 
 def avgVelocity(k):
     a = 0;
@@ -104,7 +104,6 @@ def main():
         k = solveK(k);
         dh = solveDh(k, dh);
         error1, error2 = (kOld[0]-k[0])/k[0], (kOld[quality-1]-k[quality-1])/k[quality-1];
-        #print("(",error1,error2,")", end=' ');
         print("-", end=' ');
     print(">");
     
@@ -169,7 +168,8 @@ def main():
     eLow = 0.5*kTLow*(alpha**2);
     calibkLow = (2*eLow)/(x**2);
     print();print();
-    print("dX finish line:", ((solveX(calibkHigh)-(s+d-0.1))*100)[0],"cm,", ((solveX(calibkLow)-(s+d-0.1))*100)[quality-1], "cm");
+    dX = ((solveX(calibkHigh)-(s+d-0.1))*100);
+    print("dX finish line:", dX[0],"cm,", dX[quality//3], "cm", dX[2*quality//3],"cm,", dX[quality-1], "cm");
     
     print();
     print("dh:", (dh*100)[0],",", (dh*100)[quality-1], "cm");
@@ -178,5 +178,6 @@ def main():
     print("start:", starth[0],",", starth[quality-1], ", end:", endh[0],",", endh[quality-1]);
     print("rendement:", rendement(k, dh)[0]*100,",",rendement(k, dh)[quality-1]*100);
     print("score:", (endh/(starth*m))[0],",", (endh/(starth*m))[quality-1]);
+    print("%-diff:", (((endh/(starth*m))[0])/((endh/(starth*m))[quality-1]))*100);
     
 main();

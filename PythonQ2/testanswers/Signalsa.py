@@ -3,13 +3,15 @@
 Signals.py -- Een electronicaonderdeel heeft 2 ingangssignalen:
                   
                   1. een sinusvorming ingangssignaal f(phi)
-                  2. de afgeleide daarvan g(phi  + omega), waarin 
+                  2. de afgeleide daarvan g(phi)=cos(phi+omega), waarin 
                      de faseverdraaing (hoekverdraaing) omega kan worden
                      ingesteld door onszelf
               
               We bestuderen het samengestelde complexe signaal: 
                   
-                      h(phi,omega)=g(phi+omega)+j.f(phi)
+                      h(phi)=g(phi)+j.f(phi)  =
+                      
+                      h(phi)=cos(phi+omega) + j.f(phi)
               
               We willen weten bij welke door ons gekozen omega er wel
               en wanneer er geen hoekverdraaing (faseverdraaing) optreedt
@@ -18,11 +20,11 @@ Signals.py -- Een electronicaonderdeel heeft 2 ingangssignalen:
                   
                   [-1.5*np.pi .. 1.5*np.pi] en
                   
-              bestuderen het effect van omega = k.pi/2, k=0,1,2,3
+              bestuderen het effect van omega = k.pi/2, k=1,2,3
               
               OPDRACHT
               --------
-              Zie Opgaven in Oefentoets
+              Zie OPDRACHTENBLAD Oefentoets
               
               TEMPLATE
               --------
@@ -86,9 +88,6 @@ def plotSignals(angle,omega):
     axis.legend(loc='best')
     
     # ... plot polar diagram omega=0 (referentie) --------------------
-	
-# OPDRACHT 1
-# ==========
     axis = plt.subplot('132', projection='polar')
     axis.plot(np.real(g(angle,0)+1j*f(angle)), 
                np.imag(g(angle,0)+1j*f(angle)), \
@@ -97,13 +96,11 @@ def plotSignals(angle,omega):
     
     # ... plot polar omega =/= 0 --------------------------------------
     axis = plt.subplot('133', projection='polar')
-    axis.plot(np.real(g(angle,omega)+1j*f(angle)), 
-               np.imag(g(angle,omega)+1j*f(angle)), \
+    axis.plot(np.real(g(angle,omega)+1j*f(angle)),
+               np.imag(g(angle,omega)+1j*f(angle)),  \
                color='orange',linestyle='-')
     axis.set_xlabel('$h(\phi+{:3.1f}\pi)$'. format(omega/np.pi))
-# ===========
-
-  
+    
     
 def main():
     """
@@ -120,12 +117,9 @@ def main():
     for m in range(len(OMEGA)):
         plotSignals(angle,OMEGA[m]*np.pi/2)
 
-# OPDRACHT 2
-# ==========
-    # print de waarden voor omega waarbij er faseverdraaing optreedt ...
+    # print de waarden voor omega waarbij er WEL faseverdraaing optreedt ...
     # pas de string OMEGAS aan voor de juiste melding.
-    OMEGAS='omega: k*pi/2, k=1, 3'
+    OMEGAS='omega: k*pi/2, WEL bij k=1 of 3 en NIET bij k=2'
     print('Faseverdraaing treedt op bij omega={:s}'.format(OMEGAS))
-# ==========
     
 if __name__=='__main__': main()
