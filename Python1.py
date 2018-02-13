@@ -65,7 +65,7 @@ plt.title('plot of function x(t)')
 plt.show()
 '''
 # Q6
-
+'''
 y0 = 0
 x0 = 0
 v_y0 = 2
@@ -107,4 +107,77 @@ plt.xlabel('t [s]')
 plt.ylabel('y [m]')
 plt.title('plot of function x(t)')
 plt.show()
+'''
 
+# Q7
+m = 1000
+g = 9.81
+f1 = 2000
+f2 = 1000
+t1 = 30
+t2 = 18
+alpha = 10 * (2*np.pi / 360)
+print(np.sin(alpha))
+
+f = np.sin(alpha)*m*g
+ax1 = (f1-f)/(m)
+v1 = ax1*t1
+x1 = 0.5*ax1*t1**2
+ax2 = (f2-f)/(m)
+v2 = ax2*t2 + v1
+x2 = 0.5*ax2*t2*t2 + v1*t2 + x1
+x2max = -(v1**2) / (2*ax2) + x1
+xtot= 2*x2max-x2
+xend= x2
+
+print("xtot = ", xtot)
+print("xend = ", xend)
+print("ax1 = ", ax1)
+print("ax2 = ", ax2)
+print("x1 = ", x1)
+print("x2 = ", x2)
+print("v1 = ", v1)
+print("v2 = ", v2)
+print("x2max = ", x2max)
+print("f = ", f)
+print("")
+
+# Q8
+# m = 1000
+# g = 9.81
+# f1 = 2000
+# f2 = 1000
+dt = 0.0001
+t1 = np.linspace(0,30,round(30/dt+1))
+t2 = np.linspace(0,18,round(18/dt+1))
+ax1 = (f1-f)/(m)
+ax2 = (f2-f)/(m)
+x1=np.zeros([len(t1)])
+vx1=np.zeros([len(t1)])
+x2=np.zeros([len(t2)])
+vx2=np.zeros([len(t2)])
+x1[0]=0
+vx1[0]=0
+
+for i in range(len(t1)-1):
+    x1[i+1]=x1[i]+vx1[i]*dt
+    vx1[i+1]=vx1[i]+ax1*dt
+
+x2[0]=x1[len(t1)-1]
+vx2[0]=vx1[len(t1)-1]
+
+for i in range(len(t2)-1):
+    x2[i+1]=x2[i]+vx2[i]*dt
+    vx2[i+1]=vx2[i]+ax2*dt
+
+Trest = t2[np.argmax(x2)]
+Xreverse = x2[np.argmax(x2)]-x2[len(t2)-1]
+Xend = x2[len(t2)-1]
+
+print("Trest = ", 30+Trest)
+print("Xreverse = ", Xreverse)
+print("Xend = ", Xend)
+print("dEnd = ", Xend-xend)
+
+plt.plot(t1,x1)
+plt.plot(t2,x2)

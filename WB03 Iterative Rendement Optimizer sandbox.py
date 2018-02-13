@@ -12,26 +12,26 @@ import scipy.integrate as integ
 
 quality = 100 # Elements in range
 g = 9.81 # Grav const.
-m = np.linspace(0.20, 0.21, quality) # Mass
+m = np.linspace(0.16, 0.16, quality) # Mass
 h = np.linspace(1.5, 1.5, quality) # Height
 phi = np.arcsin(1.5/5) # Slope
 s = h/np.sin(phi) # Length of slope
-Cr = 0.0025 # Rolling resistance rubber wheel
-d = 2.1 # Flat distance to finish
+Cr = 0.0035 #0.0025 # Rolling resistance rubber wheel
+d = 2.0 # Flat distance to finish
 rho = 1.225 # Air density
 Cw = 0.5 # Air resistance constant
 Af = 0.05*0.05 # Frontal Area
-mu = np.linspace(0.08, 0.08, quality) # Friction coefficient in bearing
+mu = np.linspace(0.2, 0.2, quality) # Friction coefficient in bearing
 Daxel = 0.004 # Diameter of axel
 Dwheel = 0.072 # Diameter of wheel
 CrBear = mu*(Daxel/Dwheel) # Rolling resistance steel bearing
-alpha = np.linspace(140, 140, quality) # Delta Angle of the lever
+alpha = np.linspace(170, 170, quality) # Delta Angle of the lever
 alpha = (alpha/360)*2*np.pi # ^ in rad
 rTSpring = 0.015 # Radius of tortion spring
-hysteresisCoef = 0.98 # Hysteresis loss one way
+hysteresisCoef = 0.91 # Hysteresis (and other) one way
 x = (s+d)*(Daxel/Dwheel) # Spring dispacement
-kHigh = 1356 # Max T (Nmm)
-kLow = 1356 # Max T (Nmm)
+kHigh = 582 # Max T (Nmm)
+kLow = 582 # Max T (Nmm)
 
 def avgVelocity(k):
     a = 0
@@ -179,9 +179,9 @@ def main():
     endh = h-dh
     print("start:", starth[0],",", starth[quality-1], ", end:", endh[0],",", endh[quality-1])
     print("rendement:", rendement(k, dh)[0]*100,",",rendement(k, dh)[quality-1]*100)
-    print("score:", (endh/(starth*m))[0],",", (endh/(starth*m))[quality-1])
-    print("%-diff:", (((endh/(starth*m))[0])/((endh/(starth*m))[quality-1]))*100)
+    print("score:", (endh/(starth*m))[0],",", (endh/(starth*m))[quality-1]*1.1)
+    print("%-diff:", (((endh/(starth*m))[0])/((endh/(starth*m))[quality-1]*1.1))*100)
     
-    plt.show()
+    #plt.show()
 
 main()
