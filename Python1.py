@@ -1,7 +1,7 @@
 """
 Created:    Mon Feb 12 2018
-Author:    Martijn Wisse (Python 3.5.2)
-Assignment: Python0
+Author:    Calvin Terpstra (Python 3.5.2)
+Assignment: Python1
 """
 
 ## Resetting the console, to erase old parameter values
