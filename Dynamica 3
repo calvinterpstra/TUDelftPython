@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Feb 19 14:17:25 2018
+
+@author: kenricktrip
+"""
+import numpy as np
+
+#vraag 2.1:
+print('acceleration at t=0, a=0 m/s^2')
+
+#vraag 2.2:
+dt=1
+t=np.linspace(0,600,round(1/dt*600))
+
+a=np.zeros(len(t))
+v=np.zeros(len(t))
+Fr=np.zeros(len(t))
+Ft=np.zeros(len(t))
+T=np.zeros(len(t))
+
+for i in range(len(t)-1):
+    c=5000
+    T[i]=((4*10**5)/60)*i
+    m=10**7
+    Fr[i]=v[i]*v[i]*c
+    Ft[i]=T[i]-Fr[i]
+    a[i]=Ft[i]/m
+    v[i+1]=v[i]+dt*a[i]
+v1=v[10]
+print('Speed at t=10 = {:1.15f} m/s'.format(v1))
+
+#vraag 2.3:
+dt=1
+t=np.linspace(0,600,round(1/dt*600))
+
+a=np.zeros(len(t))
+v=np.zeros(len(t))
+Fr=np.zeros(len(t))
+Ft=np.zeros(len(t))
+T=np.zeros(len(t))
+
+for i in range(len(t)-1):
+    c=5000
+    T[i]=((4*10**5)/60)*i
+    m=10**7
+    Fr[i]=v[i]*v[i]*c
+    Ft[i]=T[i]-Fr[i]
+    a[i]=Ft[i]/m
+    v[i+1]=v[i]+dt*a[i]
+v2=v[60]
+
+dt=1
+t=np.linspace(60,600,round(1/dt*540))
+
+a=np.zeros(len(t))
+v=np.zeros(len(t))
+Fr=np.zeros(len(t))
+Ft=np.zeros(len(t))
+T=np.zeros(len(t))
+
+v[0]=v2
+
+for i in range(len(t)-1):
+    c=5000
+    T=4*10**5
+    m=10**7
+    Fr[i]=v[i]*v[i]*c
+    Ft[i]=T-Fr[i]
+    a[i]=Ft[i]/m
+    v[i+1]=v[i]+dt*a[i]
+v3=v[539]
+print('Speed at t=600 = {:1.15f} m/s'.format(v3))

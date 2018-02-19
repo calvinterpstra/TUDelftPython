@@ -77,8 +77,8 @@ x0 = 0
 v0 = 10
 m = 200
 
-dt = 0.0001
-T = 20
+dt = 0.01
+T = 15
 t = np.linspace(0,T, round(T/dt + 1))
 x = np.zeros(len(t))
 v = np.zeros(len(t))
@@ -107,23 +107,18 @@ print("x error: ", x1 - x1n)
 plt.plot(t, a)
 plt.plot(t, v)
 plt.plot(t, x)
-# plt.show()
-
-# dt = 0.000001
-# T = 20
-# t = np.linspace(0,T, round(T/dt + 1))
-# x = np.zeros(len(t))
-# v = np.zeros(len(t))
-# a = np.zeros(len(t))
-# x[0] = x0
-# v[0] = v0
-
-# for i in range(len(t)-1):
-#     a[i+1] = -(10*v[i]**3)/m
-#     x[i+1] = x[i] + v[i]*dt
-#     v[i+1] = v[i] + a[i]*dt
 
 
-# x1 = np.interp(8, t, x)
-# print("x1: ", x1)
-# print("x error: ", x1 - x1n)
+# Q5:
+# Fy = T - ma*g
+# Fy = T - mb*g
+# l = sa + sb
+# aa = -ab
+# aa = (2*g*mb) / (ma+mb) - g
+
+# Q6:
+#Fy=2*T-ma*g
+#Fy=T-mb*g
+#l=2*sa+sb
+#aa=-ab/2
+#aa=(6*g*mb)/(ma+4*mb)-g

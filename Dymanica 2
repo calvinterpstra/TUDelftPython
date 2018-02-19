@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Feb 15 14:28:51 2018
+
+@author: kenricktrip
+"""
+import  numpy as np
+
+#question 2:
+dt=0.1
+t=np.linspace(0,2000,round(2000/dt+1))
+P=12
+m=1000
+
+s=np.zeros(len(t))
+v=np.zeros(len(t))
+s[0]=0
+v[0]=7
+
+for i in range(len(t)-1):
+    a=P/m
+    s[i+1]=s[i]+v[i]
+    v[i+1]=v[i]+a*dt
+
+v6000=np.interp(6000/dt,s,v)
+print('v na 6000m = {:1.20f}'.format(v6000))
+
+t4000=np.interp(4000/dt,s,t)
+print('t na 4000m = {:1.20f}'.format(t4000))
+
+error=v6000-np.sqrt(v[0]**2+2*a*6000)
+print('error = {:1.20f}'.format(error))
+
+#verander dt naar 0.001 voor de tweede error
+
+#question 3:
+dt=0.000001 #dit duurt lang maar geef het 1 minuut om te runnen
+t=np.linspace(0,10,round(10/dt+1))
+m=200
+
+s=np.zeros(len(t))
+v=np.zeros(len(t))
+a=np.zeros(len(t))
+s[0]=0
+v[0]=10
+
+for i in range(len(t)-1):
+    a[i]=v[i]**3*(-10/m)
+    v[i+1]=v[i]+a[i]*dt
+    s[i+1]=v[i]*dt+s[i]
+
+print('v na 5 seconden = {:1.20f}'.format(v[int(5/dt)]))
+print('s na 7 seconden = {:1.20f}'.format(s[int(7/dt)]))
+vanalytical=v[int(10/dt)]
+sanalytical=s[int(8/dt)]
+
+#question 4:
+dt=0.0001
+t=np.linspace(0,10,round(10/dt+1))
+m=200
+
+s=np.zeros(len(t))
+v=np.zeros(len(t))
+a=np.zeros(len(t))
+s[0]=0
+v[0]=10
+
+for i in range(len(t)-1):
+    a[i]=v[i]**3*(-10/m)
+    v[i+1]=v[i]+a[i]*dt
+    s[i+1]=v[i]*dt+s[i]
+
+print('v na 10 seconden = {:1.20f}'.format(v[int(10/dt)]))
+print('s na 8 seconden = {:1.20f}'.format(s[int(8/dt)]))
+error=np.absolute(sanalytical-s[int(8/dt)])
+print('error = {:1.20f}'.format(error))
+
+#question 5:
+#Fy=T-ma*g
+#Fy=T-mb*g
+#l=sa+sb
+#aa=-ab
+#aa=(2*g*mb)/(ma+mb)-g
+
+#question 6:
+#Fy=2*T-ma*g
+#Fy=T-mb*g
+#l=2*sa+sb
+#aa=-ab/2
+#aa=(6*g*mb)/(ma+4*mb)-g
