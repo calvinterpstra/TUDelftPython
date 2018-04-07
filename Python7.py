@@ -27,7 +27,7 @@ def derivative(state, t):
 
 state0 = [theta0, 0]
 state = odeint(derivative, state0, t)
-theta,omega = state.T
+theta, omega = state.T
 
 def lineintersect(x, y, c):
     n = len(x)
@@ -64,7 +64,7 @@ def derivative(state, t):
 
 state0 = [theta0, 0]
 state = odeint(derivative, state0, t)
-theta,omega = state.T
+theta, omega = state.T
 
 T_0s = lineintersect(t,theta,0)
 print("T (linearized):", (T_0s[21]-T_0s[1])/10, "s")
@@ -91,7 +91,7 @@ def derivative(state, t):
 
 state0 = [theta0, 0]
 state = odeint(derivative, state0, t)
-theta,omega = state.T
+theta, omega = state.T
 
 T_0s = lineintersect(t,theta,0)
 print("T:", (T_0s[21]-T_0s[1])/10, "s")
@@ -103,7 +103,7 @@ def derivative(state, t):
 
 state0 = [theta0, 0]
 state = odeint(derivative, state0, t)
-theta,omega = state.T
+theta, omega = state.T
 
 T_0s = lineintersect(t,theta,0)
 print("T (linearized):", (T_0s[21]-T_0s[1])/10, "s")
@@ -129,7 +129,7 @@ def derivative(state, t):
 
 state0 = [theta0, 0]
 state = odeint(derivative, state0, t)
-theta,omega = state.T
+theta, omega = state.T
 
 T_0s = lineintersect(t,theta,0)
 print("T:", (T_0s[21]-T_0s[1])/10, "s")
@@ -141,7 +141,7 @@ def derivative(state, t):
 
 state0 = [theta0, 0]
 state = odeint(derivative, state0, t)
-theta,omega = state.T
+theta, omega = state.T
 
 T_0s = lineintersect(t,theta,0)
 print("T (linearized):", (T_0s[21]-T_0s[1])/10, "s")
@@ -167,7 +167,7 @@ def derivative(state, t):
 
 state0 = [theta0, 0]
 state = odeint(derivative, state0, t)
-theta,omega = state.T
+theta, omega = state.T
 
 T_0s = lineintersect(t,theta,0)
 print("T:", (T_0s[21]-T_0s[1])/10, "s")
@@ -179,7 +179,7 @@ def derivative(state, t):
 
 state0 = [theta0, 0]
 state = odeint(derivative, state0, t)
-theta,omega = state.T
+theta, omega = state.T
 
 T_0s = lineintersect(t,theta,0)
 print("T (linearized):", (T_0s[21]-T_0s[1])/10, "s")
@@ -208,7 +208,7 @@ def derivative(state, t):
 
 state0 = [theta0, 0]
 state = odeint(derivative, state0, t)
-theta,omega = state.T
+theta, omega = state.T
 
 T_0s = lineintersect(t,theta,0)
 print("T:", (T_0s[21]-T_0s[1])/10, "s")
@@ -220,7 +220,7 @@ def derivative(state, t):
 
 state0 = [theta0, 0]
 state = odeint(derivative, state0, t)
-theta,omega = state.T
+theta, omega = state.T
 
 T_0s = lineintersect(t,theta,0)
 print("T (linearized):", (T_0s[21]-T_0s[1])/10, "s")
