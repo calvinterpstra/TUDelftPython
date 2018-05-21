@@ -7,15 +7,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 QUALITY = 1000
-M_CONTAINER = 2.5 
-M_HANDLER = np.linspace(4,6, QUALITY)
-D_CONTAINER = 0.850 # 0.850
+M_CONTAINER = 2.25 
+M_HANDLER = np.linspace(3,4.5, QUALITY)
+D_CONTAINER = 0.850
 D_CONTAINER_1 = 0.370
 D_CONTAINER_2 = 0.490
 D_CONTAINER_3 = 0.610
 D_CONTAINER_4 = 0.730
-D_COUNTERWEIGHT = 0.480 # 0.480
-D_CM = 0.130 # 0.130
+D_COUNTERWEIGHT = 0.480
+D_CM = 0.130
 M_COUNTERWEIGHT_CAR = 1
 
 def solveMCounterweight(mContainer, mHandeler, dContainer, dCounterweight, dCM):
@@ -31,7 +31,8 @@ def main():
     mCounterweight3 = solveMCounterweight(M_CONTAINER, M_HANDLER, D_CONTAINER_3, D_COUNTERWEIGHT, D_CM)
     mCounterweight4 = solveMCounterweight(M_CONTAINER, M_HANDLER, D_CONTAINER_4, D_COUNTERWEIGHT, D_CM)
     maxPickupDist = solveMaxPickupDist(M_CONTAINER, M_HANDLER, M_COUNTERWEIGHT_CAR, D_COUNTERWEIGHT, D_CM)
-    mTotal = M_CONTAINER + M_HANDLER + mCounterweight
+    mTotal = M_CONTAINER + M_HANDLER + mCounterweightCar
+    print("For a handler with mass (-counterweight -carried container):", M_HANDLER[0],"-", M_HANDLER[QUALITY-1], "kg")
     print("Counterweight car:", mCounterweightCar[0],"-", mCounterweightCar[QUALITY-1], "kg")
     print("Counterweight 2:", mCounterweight2[0],"-", mCounterweight2[QUALITY-1], "kg")
     print("Counterweight 3:", mCounterweight3[0],"-", mCounterweight3[QUALITY-1], "kg")
