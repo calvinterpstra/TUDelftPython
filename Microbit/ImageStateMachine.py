@@ -1,0 +1,70 @@
+# Add your Python code here. E.g.
+from microbit import *
+
+t0_emotion = running_time()
+emotionState = 0
+dislpayState = Image.CONFUSED
+
+
+def getTime_emotion():
+    return running_time() - t0_emotion
+
+def resetTime_emotion():
+    global t0_emotion
+    t0_emotion = running_time()
+
+def setEmotion(image):
+    global dislpayState
+    dislpayState = image
+
+def initEmotion():
+    global emotionState
+    resetTime_emotion()
+    emotionState += 1
+
+def smile():
+    global emotionState
+    setEmotion(Image.SMILE)
+    if(getTime_emotion() > 2000):
+        resetTime_emotion()
+        emotionState += 1
+
+def sad():
+    global emotionState
+    setEmotion(Image.SAD)
+    if(getTime_emotion() > 100):
+        resetTime_emotion()
+        emotionState += 1
+
+def confused():
+    global emotionState
+    setEmotion(Image.CONFUSED)
+    if(getTime_emotion() > 100):
+        resetTime_emotion()
+        emotionState += 1
+
+def teardownEmotion():
+    global emotionState
+    resetTime_emotion()
+    emotionState = 1
+
+emotionStates = {
+    0: initEmotion,
+    1: smile,
+    2: sad,
+    3: confused,
+    4: teardownEmotion
+}
+
+def emotionStateMachine(state):
+    func = emotionStates.get(state)
+    func()
+
+def commitDispayState():
+    display.show(dislpayState)
+
+while True:
+    emotionStateMachine(emotionState)
+    commitDispayState()
+    sleep(100)
+        
