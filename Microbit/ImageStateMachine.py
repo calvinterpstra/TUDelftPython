@@ -17,54 +17,45 @@ def setEmotion(image):
     global dislpayState
     dislpayState = image
 
-def initEmotion():
-    global emotionState
+def initEmotion(emotionState):
     resetTime_emotion()
     emotionState += 1
+    return emotionState
 
-def smile():
-    global emotionState
-    setEmotion(Image.SMILE)
+def happy(emotionState):
+    setEmotion(Image.HAPPY)
     if(getTime_emotion() > 2000):
         resetTime_emotion()
         emotionState += 1
+    return emotionState
 
-def sad():
-    global emotionState
+def sad(emotionState):
     setEmotion(Image.SAD)
-    if(getTime_emotion() > 100):
+    if(getTime_emotion() > 1000):
         resetTime_emotion()
         emotionState += 1
+    return emotionState
 
-def confused():
-    global emotionState
-    setEmotion(Image.CONFUSED)
-    if(getTime_emotion() > 100):
-        resetTime_emotion()
-        emotionState += 1
-
-def teardownEmotion():
-    global emotionState
+def teardownEmotion(emotionState):
     resetTime_emotion()
     emotionState = 1
+    return emotionState
 
 emotionStates = {
     0: initEmotion,
-    1: smile,
+    1: happy,
     2: sad,
-    3: confused,
-    4: teardownEmotion
+    3: teardownEmotion
 }
 
 def emotionStateMachine(state):
     func = emotionStates.get(state)
-    func()
+    return func(state)
 
 def commitDispayState():
     display.show(dislpayState)
 
 while True:
-    emotionStateMachine(emotionState)
+    emotionState = emotionStateMachine(emotionState)
     commitDispayState()
     sleep(100)
-        

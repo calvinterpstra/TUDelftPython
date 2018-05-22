@@ -3,8 +3,7 @@ from microbit import *
 
 t0_motion = running_time()
 t0_emotion = running_time()
-motionState = 0
-emotionState = 0
+
 servoPowerState = {
     'right': 0,
     'left': 0
@@ -41,67 +40,66 @@ def turn(power):
     servoPowerState['right'] = power
     servoPowerState['left'] = power
 
-def initMotion():
-    global motionState
+def initMotion(state):
     resetTime_motion()
-    motionState += 1
+    state['motion'] += 1
+    return state
 
-def moveForward():
-    global motionState
+def moveForward(state):
     forward(50)
-    if(getTime_motion() > 800):
+    if(getTime_motion() > 800 or state['emotion'] != 1):
         resetTime_motion()
-        motionState += 1
+        state['motion'] += 1
+    return state
 
-def turnRight():
-    global motionState
+def turnRight(state):
     turn(60)
-    if(getTime_motion() > 500):
+    if(getTime_motion() > 500 or state['emotion'] != 1):
         resetTime_motion()
-        motionState += 1
+        state['motion'] += 1
+    return state
 
-def stop():
-    global motionState
+def stop(state):
     forward(0)
-    if(getTime_motion() > 1000):
+    if(getTime_motion() > 1000 and state['emotion'] == 1):
         resetTime_motion()
-        motionState += 1
+        state['motion'] += 1
+    return state
 
-def moveBackward():
-    global motionState
+def moveBackward(state):
     forward(-30)
-    if(getTime_motion() > 500):
+    if(getTime_motion() > 500 or state['emotion'] != 1):
         resetTime_motion()
-        motionState += 1
+        state['motion'] += 1
+    return state
 
-def turnLeft():
-    global motionState
+def turnLeft(state):
     turn(-40)
-    if(getTime_motion() > 500):
+    if(getTime_motion() > 500 or state['emotion'] != 1):
         resetTime_motion()
-        motionState += 1
+        state['motion'] += 1
+    return state
 
-def teardownMotion():
-    global motionState
+def teardownMotion(state):
     resetTime_motion()
     forward(0)
-    motionState = 1
+    state['motion'] = 1
+    return state
 
 motionStates = {
     0: initMotion,
     1: moveForward,
     2: turnRight,
     3: stop,
-    4: moveBackward,
+    4: moveForward,
     5: turnLeft,
     6: stop,
-    7: moveForward,
-    8: teardownMotion
+    7: teardownMotion
 }
 
 def motionStateMachine(state):
-    func = motionStates.get(state)
-    func()
+    func = motionStates.get(state['motion'])
+    return func(state)['motion']
 
 def commitServoPowers():
     pin1.write_analog(powerToAnalog(servoPowerState.get('right')))
@@ -111,36 +109,36 @@ def setEmotion(image):
     global dislpayState
     dislpayState = image
 
-def initEmotion():
-    global emotionState
+def initEmotion(state):
     resetTime_emotion()
-    emotionState += 1
+    state['emotion'] += 1
+    return state
 
-def happy():
-    global emotionState
+def happy(state):
     setEmotion(Image.HAPPY)
     if(getTime_emotion() > 2000):
         resetTime_emotion()
-        emotionState += 1
+        state['emotion'] += 1
+    return state
 
-def sad():
-    global emotionState
+def sad(state):
     setEmotion(Image.SAD)
     if(getTime_emotion() > 1000):
         resetTime_emotion()
-        emotionState += 1
+        state['emotion'] += 1
+    return state
 
-def confused():
-    global emotionState
+def confused(state):
     setEmotion(Image.CONFUSED)
     if(getTime_emotion() > 1000):
         resetTime_emotion()
-        emotionState += 1
+        state['emotion'] += 1
+    return state
 
-def teardownEmotion():
-    global emotionState
+def teardownEmotion(state):
     resetTime_emotion()
-    emotionState = 1
+    state['emotion'] = 1
+    return state
 
 emotionStates = {
     0: initEmotion,
@@ -151,16 +149,19 @@ emotionStates = {
 }
 
 def emotionStateMachine(state):
-    func = emotionStates.get(state)
-    func()
+    func = emotionStates.get(state['emotion'])
+    return func(state)['emotion']
 
 def commitDispayState():
     display.show(dislpayState)
 
+state = {
+    'motion': 0,
+    'emotion': 0
+}
 while True:
-    motionStateMachine(motionState)
-    emotionStateMachine(emotionState)
+    state['motion'] = motionStateMachine(state)
+    state['emotion'] = emotionStateMachine(state)
     commitServoPowers()
     commitDispayState()
     sleep(100)
-        
