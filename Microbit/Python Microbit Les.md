@@ -67,9 +67,9 @@ Hiervoor is er wat code gegeven om de servos aantedrijven: (Voor deze les is het
 ```python 
 from microbit import * # Beginnen de programma door alles vanuit de microbit library te importeren, dit is maar een keer nodig
 
-servoPowerState = { # Toestand van de servos
-    'right': 0,
-    'left': 0
+fysiekeToestand = { # De fysieke toestand van de micro:bit
+    'rechterServoPower': 0,
+    'linkerServoPower': 0,
 }
 
 def powerToAnalog(power): # Zet +/- 0-100% vermogen (power) over naar analog input
@@ -81,32 +81,36 @@ def powerToAnalog(power): # Zet +/- 0-100% vermogen (power) over naar analog inp
         return power*0.3 + 75
 
 def vooruit(power): # Update de power state van de servos (om vooruit te rijden, - is achteruit)
-    servoPowerState['right'] = power
-    servoPowerState['left'] = -power
+    fysiekeToestand['rechterServoPower'] = power
+    fysiekeToestand['linkerServoPower'] = -power
 
 def draaien(power): # Update de power state van de servos (om reghts om te draaien, - is links om)
-    servoPowerState['right'] = power
-    servoPowerState['left'] = power
+    fysiekeToestand['rechterServoPower'] = power
+    fysiekeToestand['linkerServoPower'] = power
 
-def commitServoPowers(): # Stuurt signaal uit de servo state naar servos
-    pin1.write_analog(powerToAnalog(servoPowerState.get('right')))
-    pin2.write_analog(powerToAnalog(servoPowerState.get('left')))
+def commitFysiekeToestand(): # Stuurt signaal uit de servo state naar servos
+    pin1.write_analog(powerToAnalog(fysiekeToestand.get('rechterServoPower')))
+    pin2.write_analog(powerToAnalog(fysiekeToestand.get('linkerServoPower')))
+
 ```
 
 Om de Micro:bit vooruit te laten bewegen roepen wij de functie aan: `vooruit(100)` (beweegt vooruit met 100% vermogen), of om te draaien: `draaien(-50)` (draait links met 50% vermogen)
 
 Wij kunnen ook afbeeldingen op de display van de Micro:bit afbeelden, bijvoorbeeld door deze functies:
 
-```python 
-def instelAfbeelding(image): # Update de state van het display met een afbeelding
-    global dislpayState
-    dislpayState = image
+```python
+fysiekeToestand = { # De fysieke toestand van de micro:bit
+    'dislpayState': Image.HAPPY
+}
 
-def commitDispayState(): # Toond een afbeelding op het display
-    display.show(dislpayState)
+def instelAfbeelding(image): # Update de state van het display met een afbeelding
+    fysiekeToestand['dislpayState'] = image
+
+def commitFysiekeToestand(): # Toond een afbeelding op het display
+    display.show(fysiekeToestand.get('dislpayState'))
 ```
 
-Om iets aftebeelden moeten wij de functie `instelAfbeelding` aanroepen bijvoorbeeld zo: `instelAfbeelding(IMAGE.Happy)`. Hier mee toond het display een smiley-face aan. (Hier kan je een lijt vinden van alle andere Images: http://microbit-micropython.readthedocs.io/en/latest/tutorials/images.html)
+Om iets aftebeelden moeten wij de functie `instelAfbeelding` aanroepen bijvoorbeeld zo: `instelAfbeelding(Image.SAD)`. Hier mee toond het display een sad-face aan. (Hier kan je een lijt vinden van alle andere Images: http://microbit-micropython.readthedocs.io/en/latest/tutorials/images.html)
 
 Wij kunnen ook onze iegen Image aanmaken: 
 ```python
@@ -205,9 +209,9 @@ def resetTime(): # Reset onze timer
     global t0
     t0 = running_time()
 
-servoPowerState = { # Toestand van de servos
-    'right': 0,
-    'left': 0
+fysiekeToestand = { # De fysieke toestand van de micro:bit
+    'rechterServoPower': 0,
+    'linkerServoPower': 0,
 }
 
 def powerToAnalog(power): # Zet +/- 0-100% vermogen (power) over naar analog input
@@ -219,16 +223,16 @@ def powerToAnalog(power): # Zet +/- 0-100% vermogen (power) over naar analog inp
         return power*0.3 + 75
 
 def vooruit(power): # Update de power state van de servos (om vooruit te rijden, - is achteruit)
-    servoPowerState['right'] = power
-    servoPowerState['left'] = -power
+    fysiekeToestand['rechterServoPower'] = power
+    fysiekeToestand['linkerServoPower'] = -power
 
 def draaien(power): # Update de power state van de servos (om reghts om te draaien, - is links om)
-    servoPowerState['right'] = power
-    servoPowerState['left'] = power
+    fysiekeToestand['rechterServoPower'] = power
+    fysiekeToestand['linkerServoPower'] = power
 
-def commitServoPowers(): # Stuurt signaal uit de servo state naar servos
-    pin1.write_analog(powerToAnalog(servoPowerState.get('right')))
-    pin2.write_analog(powerToAnalog(servoPowerState.get('left')))
+def commitFysiekeToestand(): # Stuurt signaal uit de servo state naar servos
+    pin1.write_analog(powerToAnalog(fysiekeToestand.get('rechterServoPower')))
+    pin2.write_analog(powerToAnalog(fysiekeToestand.get('linkerServoPower')))
 
 def initializatie(state): # Defineert functie voor state
     resetTime() # Timer resetten
@@ -248,22 +252,22 @@ def beweegVooruit(state): # Defineert functie voor state
         state += 1 # Naar de volgende state gaan
     return state # Geeft door wat de volgende state moet zijn (eerst vaak het huidige)
 
-def beweegVooruit(state):
-    vooruit(0) # Beweeg vooruit met 50%
-    if(getTime() > 800): # hoeft niet 0.8 seconden te zijn, is voorbeeld
+def stop(state):
+    vooruit(0) #  Stop servos (zet vermogen naar 0%)
+    if(getTime() > 800): # Hoeft niet 0.8 seconden te zijn, is voorbeeld
         resetTime()
         state += 1
-    return state huidige)
+    return state # Geeft door wat de volgende state moet zijn (eerst vaak het huidige)
 
 def draaiRechts(state):
-    turn(60)
-    if(getTime_motion() > 500): # hoeft niet 0.5 seconden te zijn, is voorbeeld
+    draaien(60) # Draai met 60%
+    if(getTime() > 500): # Hoeft niet 0.5 seconden te zijn, is voorbeeld
         resetTime()
         state += 1
     return state
 
-states = { # Maakt een dinctionary voor alle states
-    0: initializatie,  # key: value, of naam: functie
+states = { # Maakt een dictionary voor alle states
+    0: initializatie,  # Key: value, of naam: functie
     1: beweegVooruit,
     2: stop,
     3: draaiRechts,
@@ -277,9 +281,92 @@ def stateMachine(state): # Functie waarmee de states worden geroepen
 state = 0 # Begin state
 while True:
     state = stateMachine(state) # Update en voerd de huidige state uit
-    commitServoPowers() # Nu worden de servos pas echt aangedreven
+    commitFysiekeToestand() # Nu worden de servos pas echt aangedreven
     sleep(100) # Geeft tijd om alles uit te voeren
 ```
-Probeer nu ook helemaal zelf een lineare State Machine te maken die een paar afbeeldingen toond. 
+Dit kan je nu op de Micro:bit draaien! Doe dit door naar de python editor (https://python.microbit.org/v/1) te gaan, jouw code loaden, en dan downloaden naar de Micro:bit
+
+Probeer nu ook helemaal zelf een lineare State Machine te maken die een paar verschillende afbeeldingen toond. 
 
 ## Deel 4: Gecombineerde State Machines
+State machines kunnen ook veel colplexer (en leuker) zijn. Je kan zelfs meerdere parallel laten draaien, en ze ook afankelijk van elkaar maken!
+
+Wij gaan dus nu een State Machine maken die twee states bijhoud: een beweging en een "emotie". De Micro:bit gaat alleen bewegen als het blij (happy) is, en stoppen als het verdrietig (sad) is.
+
+Om dit te doen moeten wij een paar dingen van onze lineare state machine aanpassen. Om dat wij nu twee states boumoeten houden, moet onse *state* variabel informatie bijhouden voor twee state machines, een for beweging, en een voor emotie:
+
+```python
+def bewegingStateMachine(state): # Functie waarmee de states worden geroepen
+    func = bewegingStates.get(state['beweging']) # Pakt de functie die bij de huidige state hoort
+    return func(state)['beweging'] # Elke state geeft de volgende state aan als return waarde
+
+def emotieStateMachine(state): # Functie waarmee de states worden geroepen
+    func = emotieStates.get(state['emotie']) # Pakt de functie die bij de huidige state hoort
+    return func(state)['emotie'] # Elke state geeft de volgende state aan als return waarde
+
+state = {  # Begin state (Dit is nu een dictionary met twee states)
+    'beweging': 0,
+    'emotie': 0
+}
+while True:
+    state['beweging'] = bewegingStateMachine(state) # Update en voerd de huidige state uit
+    state['emotie'] = emotieStateMachine(state) # Update en voerd de huidige state uit
+    commitFysiekeToestand() # Nu worden de servos pas echt aangedreven en afbeelding pas echt afgebeeld
+    sleep(100) # Geeft tijd om alles uit te voeren
+```
+Ook moeten er twee timers zijn:
+
+```python
+t0_beweging = running_time() # De tijd waarop ons beweging timer start
+t0_emotie = running_time() # De tijd waarop ons emotie timer start
+
+def getTimeBeweging(): # Geeft de tijd van onze beweging timer
+    return running_time() - t0_beweging
+
+def getTimeEmotie(): # Geeft de tijd van onze emotie timer
+    return running_time() - t0_emotie
+
+def resetTimeBeweging(): # Reset onze beweging timer
+    global t0_beweging
+    t0_beweging = running_time()
+
+def resetTimeEmotie(): # Reset onze emotie timer
+    global t0_emotie
+    t0_emotie = running_time()
+```
+
+Binnen de state functies moeten wij nu ook anders om gaan met de state omdat het een dictionary is.
+
+Het moet er bij voorbeeld zo uit zien:
+
+```python
+def blij(state):
+    instelAfbeelding(Image.HAPPY)
+    if(getTimeEmotie() > 2000): # Blij voor 2 seconden
+        resetTimeEmotie()
+        state['emotie'] += 1
+    return state
+```
+
+Probeer nu zelf ook de rest van de states te programeren, en vergeet niet dat de *conditional* voor de bewegingen ook naar de emotie state moeten kijken. Hieronder staan de niewe states gedefineerd:
+
+```python
+bewegingStates = {
+    0: bewegingInitializatie,
+    1: beweegVooruit,
+    2: stop,
+    3: draaiRechts,
+    4: stop,
+    5: bewegingAfbreaken
+}
+
+emotieStates = {
+    0: emotieInitializatie,
+    1: blij,
+    2: verwarred,
+    3: verdrietig,
+    4: verwarred,
+    5: emotieAfbreaken
+}
+```
+Nou dat alles samen is, kan je jouw programma op de Micro:bit draaien!
