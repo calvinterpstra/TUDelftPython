@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 QUALITY = 1000
-M_CONTAINER = 2.25 
-M_HANDLER = np.linspace(3,4.5, QUALITY)
+M_CONTAINER = 2.2 
+M_HANDLER = np.linspace(4.5,5.5, QUALITY)
 D_CONTAINER = 0.850
 D_CONTAINER_1 = 0.370
 D_CONTAINER_2 = 0.490
@@ -16,7 +16,7 @@ D_CONTAINER_3 = 0.610
 D_CONTAINER_4 = 0.730
 D_COUNTERWEIGHT = 0.480
 D_CM = 0.130
-M_COUNTERWEIGHT_CAR = 1
+M_COUNTERWEIGHT_CAR = 0.65
 
 def solveMCounterweight(mContainer, mHandeler, dContainer, dCounterweight, dCM):
     return (mContainer*dContainer - mHandeler*dCM) / dCounterweight
