@@ -24,8 +24,7 @@ def a(t):
         return 2
 
 for(tf_i in t_f):
-
-t = 0
+    t = 0
 while(t <= 2):
     k1 = dt * f(t, w_n)
     k2 = dt * f(t + 0.5*dt, w_n + 0.5*k1)
