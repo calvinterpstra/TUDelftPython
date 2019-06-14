@@ -42,14 +42,21 @@ def rk4(dt, t_end, t_f):
 k = 5
 dt = 0.2/2**k
 t_f = np.linspace(0, 10, 100)
-v_new = np.linspace(0, 0, 100)
+v_eq = np.linspace(0, 0, 100)
 
 for i in range(len(t_f)):
-    v_new[i] = rk4(dt, 10, t_f[i])[-1][1]
+    v_eq[i] = rk4(dt, 60, t_f[i])[-1][1]
 
-plt.plot(t_f, v_new)
-plt.show()
-
-v_max_pos = np.argmax(v_new)
+v_max_pos = np.argmax(v_eq)
 t_f_max = t_f[v_max_pos]
 print("t_f_max: ", t_f_max)
+
+plt.plot(t_f, v_eq)
+plt.axvline(x=t_f_max, color='r', dashes=[6, 2])
+plt.title(r'$t_f$ vs $v_{eq}$')
+plt.ylabel(r'$v_{eq}$')
+plt.xlabel(r'$t_f$ (s)')
+plt.text(3.5, 7, r'$t_f = 3.333$ s')
+plt.axis("equal")
+plt.grid(True)
+plt.show()
