@@ -1,12 +1,9 @@
+
 import queue as Q
 import time
-# import resource
+import resource
 import sys
 import math
-
-#### SKELETON CODE ####
-# The Class that Represents the Puzzle
-
 
 class PuzzleState(object):
     """docstring for PuzzleState"""
