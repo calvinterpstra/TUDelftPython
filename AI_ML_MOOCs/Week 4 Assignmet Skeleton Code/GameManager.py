@@ -69,9 +69,9 @@ class GameManager:
             move = None
 
             if turn == PLAYER_TURN:
-                print "Player's Turn:",
+                print("Player's Turn:"),
                 move = self.playerAI.getMove(gridCopy)
-                print actionDic[move]
+                print(actionDic[move])
 
                 # Validate Move
                 if move != None and move >= 0 and move < 4:
@@ -81,20 +81,20 @@ class GameManager:
                         # Update maxTile
                         maxTile = self.grid.getMaxTile()
                     else:
-                        print "Invalid PlayerAI Move"
+                        print("Invalid PlayerAI Move")
                         self.over = True
                 else:
-                    print "Invalid PlayerAI Move - 1"
+                    print("Invalid PlayerAI Move - 1")
                     self.over = True
             else:
-                print "Computer's turn:"
+                print("Computer's turn:")
                 move = self.computerAI.getMove(gridCopy)
 
                 # Validate Move
                 if move and self.grid.canInsert(move):
                     self.grid.setCellValue(move, self.getNewTileValue())
                 else:
-                    print "Invalid Computer AI Move"
+                    print("Invalid Computer AI Move")
                     self.over = True
 
             if not self.over:
@@ -104,7 +104,7 @@ class GameManager:
             self.updateAlarm(time.clock())
 
             turn = 1 - turn
-        print maxTile
+        print(maxTile)
 
     def isGameOver(self):
         return not self.grid.canMove()
